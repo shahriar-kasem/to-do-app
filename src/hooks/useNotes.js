@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react"
+import { useQuery } from "react-query";
 
 const useNotes = () => {
-    const [task, setTask] = useState([]);
-    useEffect(() => {
-        fetch('http://localhost:5000/notes')
-        .then(res=>res.json())
-        .then(data=>setTask(data))
-    },[])
-    return [task, setTask];
+    const {data: notes, refetch, isLoading} = useQuery('notesData', () => fetch('http://localhost:5000/notes').then(res=>res.json()
+    )
+    )
+    return {notes, refetch, isLoading};
 }
 
 export default useNotes;

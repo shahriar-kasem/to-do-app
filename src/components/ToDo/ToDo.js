@@ -5,30 +5,39 @@ import TaskList from '../TaskList';
 
 const ToDo = () => {
     const [ToDo, setToDo] = useState([]);
-    const [task, setTask] = useNotes();
-    console.log(task)
+    const {notes, refetch, isLoading} = useNotes();
+    console.log(notes)
 
     const { register, handleSubmit } = useForm();
     const onSubmit = (data, e) => {
         const name = data.name;
         const description = data.name;
         const newTask = {name, description};
+        console.log(newTask)
+        e.target.reset()
 
-        fetch('http://localhost:5000/add',{
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json',
-            },
-            body: JSON.stringify(newTask),
-        })
-        .then(res=>res.json())
-        .then(data=>{
-            console.log(data)
-            const newTaskList = [...task, newTask];
-            setTask(newTaskList)
-            e.target.reset();
-        })
+        // fetch('http://localhost:5000/add',{
+        //     method: 'POST',
+        //     headers: {
+        //         'content-type': 'application/json',
+        //     },
+        //     body: JSON.stringify(newTask),
+        // })
+        // .then(res=>res.json())
+        // .then(data=>{
+        //     console.log(data)
+        //     const newTaskList = [...task, newTask];
+        //     setTask(newTaskList)
+        //     e.target.reset();
+        // })
     };
+
+    const handleComplete = () => {
+        
+    }
+    const handleDelete = () => {
+
+    }
 
     return (
         <section>
@@ -53,8 +62,8 @@ const ToDo = () => {
     </thead>
     <tbody>
 
-{
-    task.map((t,index) =><TaskList 
+{   notes && 
+    notes.map((t,index) =><TaskList 
     key={t._id}
     index={index}
     task={t}
