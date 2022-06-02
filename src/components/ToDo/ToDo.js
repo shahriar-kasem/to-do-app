@@ -10,7 +10,7 @@ const ToDo = () => {
     const { register, handleSubmit } = useForm();
     const onSubmit = (data, e) => {
         const name = data.name;
-        const description = data.name;
+        const description = data.description;
         const newTask = { name, description };
         e.target.reset()
 
