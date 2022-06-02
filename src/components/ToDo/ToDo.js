@@ -7,14 +7,12 @@ import TaskList from '../TaskList';
 const ToDo = () => {
     const [ToDo, setToDo] = useState([]);
     const { notes, refetch, isLoading } = useNotes();
-    // console.log(notes)
 
     const { register, handleSubmit } = useForm();
     const onSubmit = (data, e) => {
         const name = data.name;
         const description = data.name;
         const newTask = { name, description };
-        // console.log(newTask)
         e.target.reset()
 
         fetch('http://localhost:5000/add', {
@@ -26,10 +24,15 @@ const ToDo = () => {
         })
             .then(res => res.json())
             .then(data => {
-                // console.log(data)
-                refetch()
-                toast.success('Task added successfully')
-                e.target.reset();
+                console.log(data)
+                if(data.insertedId){
+                    refetch()
+                    toast.success('Task added successfully')
+                    e.target.reset();
+                }
+                else{
+                    toast.error('Something went wrong!')
+                }
             })
     };
 
@@ -43,9 +46,15 @@ const ToDo = () => {
             },
             body: JSON.stringify({complete, id}),
         })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data)
+        .then(res => {
+            res.json()
+            if(res.status === 200){
+                refetch()
+                toast.success('Task completed successfully')
+            }
+            else{
+
+            }
         })
     }
     const handleDelete = (id) => {
@@ -69,8 +78,8 @@ const ToDo = () => {
                                 <th></th>
                                 <th>Name</th>
                                 <th>Description</th>
-                                <th>Complete</th>
-                                <th>Delete</th>
+                                <th className='text-center'>Complete</th>
+                                <th className='text-center'>Delete</th>
                             </tr>
                         </thead>
                         <tbody>
