@@ -84,7 +84,9 @@ const ToDo = () => {
             <div className='my-5'>
                 <h1 className='text-center font-bold text-3xl my-1 text-success'>Your task list are below</h1>
                 <div className="overflow-x-auto">
-                    <table className="table w-3/4 lg mx-auto">
+                    {
+                        (notes.length >= 1) && 
+                        <table className="table w-3/4 lg mx-auto">
                         <thead>
                             <tr>
                                 <th></th>
@@ -108,6 +110,11 @@ const ToDo = () => {
 
                         </tbody>
                     </table>
+                    }
+                    {
+                        (notes.length === 0) && 
+                        <p className='my-3 text-lg text-red-500 font-semibold text-center'>Please add something to see here</p>
+                    }
                 </div>
             </div>
         </section>
