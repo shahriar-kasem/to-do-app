@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import useNotes from '../../hooks/useNotes';
 import TaskList from '../TaskList';
 
 const ToDo = () => {
-    const [ToDo, setToDo] = useState([]);
-    const { notes, refetch, isLoading } = useNotes();
+    const { notes, refetch } = useNotes();
 
     const { register, handleSubmit } = useForm();
     const onSubmit = (data, e) => {
@@ -24,13 +23,12 @@ const ToDo = () => {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
-                if(data.insertedId){
+                if (data.insertedId) {
                     refetch()
                     toast.success('Task added successfully')
                     e.target.reset();
                 }
-                else{
+                else {
                     toast.error('Something went wrong!')
                 }
             })
@@ -40,25 +38,39 @@ const ToDo = () => {
         const complete = 'Completed';
 
         fetch(`http://localhost:5000/update`, {
-            method: "PATCH", 
+            method: "PATCH",
             headers: {
                 'content-type': 'application/json',
             },
-            body: JSON.stringify({complete, id}),
+            body: JSON.stringify({ complete, id }),
         })
-        .then(res => {
-            res.json()
-            if(res.status === 200){
-                refetch()
-                toast.success('Task completed successfully')
-            }
-            else{
-
-            }
-        })
+            .then(res => {
+                res.json()
+                if (res.status === 200) {
+                    refetch()
+                    toast.success('Task completed successfully')
+                }
+                else {
+                    refetch()
+                    toast.error('Something went wrong!')
+                }
+            })
     }
     const handleDelete = (id) => {
-
+        fetch(`http://localhost:5000/delete/note/${id}`, {
+            method: "DELETE",
+        })
+            .then(res => res.json())
+            .then(data => {
+                if(data.deletedCount === 1){
+                    refetch()
+                    toast.success('Task deleted successfully')
+                }
+                else{
+                    refetch()
+                    toast.error('Something went wrong!')
+                }
+            })
     }
 
     return (
