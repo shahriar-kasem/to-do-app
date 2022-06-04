@@ -17,7 +17,7 @@ const ToDo = () => {
         const email = user.email;
         const newTask = { name, description, email };
 
-        fetch('http://localhost:5000/add', {
+        fetch('https://intense-depths-38593.herokuapp.com/add', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
@@ -40,7 +40,7 @@ const ToDo = () => {
     const handleComplete = (id) => {
         const complete = 'Completed';
 
-        fetch(`http://localhost:5000/update`, {
+        fetch(`https://intense-depths-38593.herokuapp.com/update`, {
             method: "PATCH",
             headers: {
                 'content-type': 'application/json',
@@ -60,7 +60,7 @@ const ToDo = () => {
             })
     }
     const handleDelete = (id) => {
-        fetch(`http://localhost:5000/delete/note/${id}`, {
+        fetch(`https://intense-depths-38593.herokuapp.com/delete/note/${id}`, {
             method: "DELETE",
         })
             .then(res => res.json())
