@@ -1,5 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useNotes from '../../hooks/useNotes';
 import TaskList from '../TaskList';
@@ -62,11 +63,11 @@ const ToDo = () => {
         })
             .then(res => res.json())
             .then(data => {
-                if(data.deletedCount === 1){
+                if (data.deletedCount === 1) {
                     refetch()
                     toast.success('Task deleted successfully')
                 }
-                else{
+                else {
                     refetch()
                     toast.error('Something went wrong!')
                 }
@@ -74,7 +75,8 @@ const ToDo = () => {
     }
 
     return (
-        <section>
+        <section className='text-center'>
+            <Link to='/login'>Login</Link>
             <h1 className='text-info text-2xl text-center my-5 font-bold'><i>Welcome to To Do app</i></h1>
             <form className='flex flex-col justify-center items-center mx-2' onSubmit={handleSubmit(onSubmit)}>
                 <input className='border-2 p-2 my-1 w-full md:w-1/2 rounded-lg' placeholder='Name' {...register("name")} required />
@@ -85,34 +87,34 @@ const ToDo = () => {
                 <h1 className='text-center font-bold text-3xl my-1 text-success'>Your task list are below</h1>
                 <div className="overflow-x-auto">
                     {
-                        (notes.length >= 1) && 
+                        (notes?.length >= 1) &&
                         <table className="table w-3/4 lg mx-auto">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th className='text-center'>Complete</th>
-                                <th className='text-center'>Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th className='text-center'>Complete</th>
+                                    <th className='text-center'>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                            {notes &&
-                                notes.map((t, index) => <TaskList
-                                    key={t._id}
-                                    index={index}
-                                    task={t}
-                                    handleComplete={handleComplete}
-                                    handleDelete={handleDelete}
-                                ></TaskList>)
-                            }
+                                {notes &&
+                                    notes.map((t, index) => <TaskList
+                                        key={t._id}
+                                        index={index}
+                                        task={t}
+                                        handleComplete={handleComplete}
+                                        handleDelete={handleDelete}
+                                    ></TaskList>)
+                                }
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
                     }
                     {
-                        (notes.length === 0) && 
+                        (notes?.length === 0) &&
                         <p className='my-3 text-lg text-red-500 font-semibold text-center'>Please add something to see here</p>
                     }
                 </div>
