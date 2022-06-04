@@ -1,8 +1,6 @@
-import { signOut } from 'firebase/auth';
 import React from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import auth from '../../firebase.init';
 import useNotes from '../../hooks/useNotes';
@@ -69,7 +67,7 @@ const ToDo = () => {
             .then(data => {
                 if (data.deletedCount === 1) {
                     refetch()
-                    toast.success('Task deleted successfully')
+                    toast('Task deleted successfully')
                 }
                 else {
                     refetch()
@@ -77,25 +75,18 @@ const ToDo = () => {
                 }
             })
     }
-    const logout = () => {
-        signOut(auth);
-      };
 
     return (
         <section className='text-center'>
-            {
-                user && <p>{user.displayName}</p>
-            }
-            <Link to='/login'>Login</Link>
-            <button className='btn btn-xs' onClick={logout}>Sign Out</button>
-            <h1 className='text-info text-2xl text-center my-5 font-bold'><i>Welcome to To Do app</i></h1>
+            <h3 className='mt-5 text-lg font-bold'>Hello, {user?.displayName}</h3>
+            <h1 className='text-info text-2xl text-center font-bold mb-5'><i>Welcome to To Do app</i></h1>
             <form className='flex flex-col justify-center items-center mx-2' onSubmit={handleSubmit(onSubmit)}>
                 <input className='border-2 p-2 my-1 w-full md:w-1/2 rounded-lg' placeholder='Name' {...register("name")} required />
                 <textarea rows={2} className='border-2 p-2 my-1 w-full md:w-1/2 rounded-lg' placeholder='Description' {...register("description")} required />
                 <input className='btn btn-info btn-outline border py-1 px-3 text-white mt-2' type="submit" value='Add task' />
             </form>
             <div className='my-5'>
-                <h1 className='text-center font-bold text-3xl my-1 text-success'>Your task list are below</h1>
+                <h1 className='text-center font-bold text-3xl my-1'>Your task list are below</h1>
                 <div className="overflow-x-auto">
                     {
                         (notes?.length >= 1) &&
