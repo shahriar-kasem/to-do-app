@@ -10,14 +10,14 @@ import TaskList from '../TaskList';
 
 const ToDo = () => {
     const [user] = useAuthState(auth);
-    const { notes, refetch } = useNotes();
+    const { notes, refetch } = useNotes(user);
 
     const { register, handleSubmit } = useForm();
     const onSubmit = (data, e) => {
         const name = data.name;
         const description = data.description;
-        const newTask = { name, description };
-        e.target.reset()
+        const email = user.email;
+        const newTask = { name, description, email };
 
         fetch('http://localhost:5000/add', {
             method: 'POST',
