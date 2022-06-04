@@ -1,11 +1,15 @@
+import { signOut } from 'firebase/auth';
 import React from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import auth from '../../firebase.init';
 import useNotes from '../../hooks/useNotes';
 import TaskList from '../TaskList';
 
 const ToDo = () => {
+    const [user] = useAuthState(auth);
     const { notes, refetch } = useNotes();
 
     const { register, handleSubmit } = useForm();
@@ -73,10 +77,17 @@ const ToDo = () => {
                 }
             })
     }
+    const logout = () => {
+        signOut(auth);
+      };
 
     return (
         <section className='text-center'>
+            {
+                user && <p>{user.displayName}</p>
+            }
             <Link to='/login'>Login</Link>
+            <button className='btn btn-xs' onClick={logout}>Sign Out</button>
             <h1 className='text-info text-2xl text-center my-5 font-bold'><i>Welcome to To Do app</i></h1>
             <form className='flex flex-col justify-center items-center mx-2' onSubmit={handleSubmit(onSubmit)}>
                 <input className='border-2 p-2 my-1 w-full md:w-1/2 rounded-lg' placeholder='Name' {...register("name")} required />

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import auth from '../../firebase.init';
+import Loading from './Loading';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,12 +16,22 @@ const Login = () => {
   ] = useSignInWithEmailAndPassword(auth);
   const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
 
+  useEffect(() => {
+    if (user || gUser) {
+      navigate('/');
+    }
+  },[user, gUser, navigate])
+
   const onSubmit = async (data, e) => {
     const email = data.email;
     const password = data.password;
     await signInWithEmailAndPassword(email, password)
     e.target.reset()
   };
+
+  if (loading || gLoading) {
+    return <Loading></Loading>
+  }
 
   return (
     <section className='text-center my-5 border-2 max-w-md rounded-xl mx-auto py-5'>

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import auth from '../../firebase.init';
 import { useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from 'react-firebase-hooks/auth';
+import Loading from './Loading';
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -12,18 +13,28 @@ const SignUp = () => {
         user,
         loading,
         error,
-      ] = useCreateUserWithEmailAndPassword(auth);
-      const [updateProfile] = useUpdateProfile(auth);
-      const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
+    ] = useCreateUserWithEmailAndPassword(auth);
+    const [updateProfile] = useUpdateProfile(auth);
+    const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
 
-    const onSubmit = async(data, e) => {
+    useEffect(() => {
+        if (user || gUser) {
+          navigate('/');
+        }
+      },[user, gUser, navigate])
+
+    const onSubmit = async (data, e) => {
         const name = data.name;
         const email = data.email;
         const password = data.password;
         await createUserWithEmailAndPassword(email, password);
-        await updateProfile({displayName: name})
+        await updateProfile({ displayName: name })
         e.target.reset()
     };
+
+    if (loading || gLoading) {
+        return <Loading></Loading>
+    }
 
     return (
         <section className='text-center my-5 border-2 max-w-md rounded-xl mx-auto py-5'>
