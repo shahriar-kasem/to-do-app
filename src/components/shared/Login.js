@@ -21,25 +21,6 @@ const Login = () => {
         <div class="form-control w-full max-w-xs">
           <label class="label">
             <span class="label-text">Your
-              name</span>
-          </label>
-          <input type="text" placeholder="Name" autoComplete='off' class="input input-bordered w-full max-w-xs"
-            {...register("name", {
-              required: {
-                value: true,
-                message: 'Your name is required'
-              }
-            })}
-          />
-          <label class="label">
-            {
-              errors?.name?.type === 'required' && <p className='text-red-500'><small>{errors.name.message}</small></p>
-            }
-          </label>
-        </div>
-        <div class="form-control w-full max-w-xs">
-          <label class="label">
-            <span class="label-text">Your
               email</span>
           </label>
           <input type="email" placeholder="Email" autoComplete='off' class="input input-bordered w-full max-w-xs"
