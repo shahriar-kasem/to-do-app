@@ -1,15 +1,24 @@
 import React from 'react';
+import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import auth from '../../firebase.init';
 
 const Login = () => {
+  const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const onSubmit = (data, e) => {
-    const name = data.name;
+  const [
+    signInWithEmailAndPassword,
+    user,
+    loading,
+    error,
+  ] = useSignInWithEmailAndPassword(auth);
+  const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
+
+  const onSubmit = async (data, e) => {
     const email = data.email;
     const password = data.password;
-    const info = { name, email, password };
-    console.log(info)
+    await signInWithEmailAndPassword(email, password)
     e.target.reset()
   };
 
@@ -70,7 +79,10 @@ const Login = () => {
               }
             </label>
           </div>
-          <button  className={`btn max-w-xs w-full btn-outline ${(errors.name || errors.email || errors.password) ? 'btn-disabled' : ''}`} type="submit">Login</button>
+          {
+            error && <p className='text-red-500'><small>{error.message}</small></p>
+          }
+          <button className={`btn max-w-xs w-full btn-outline ${(errors.name || errors.email || errors.password) ? 'btn-disabled' : ''}`} type="submit">Login</button>
         </form>
       </div>
       <div>
@@ -78,7 +90,10 @@ const Login = () => {
       </div>
       <div className="divider max-w-xs mx-auto  font-semibold">OR</div>
       <div>
-      <button className='btn max-w-xs w-full btn-outline' type="submit">Contine with Google</button>
+        {
+          gError && <p className='text-red-500'><small>{gError.message}</small></p>
+        }
+        <button onClick={() => signInWithGoogle()} className='btn max-w-xs w-full btn-outline' type="submit">Contine with Google</button>
       </div>
     </section>
   );
